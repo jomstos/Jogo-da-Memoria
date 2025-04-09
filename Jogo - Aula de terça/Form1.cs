@@ -1,3 +1,5 @@
+using System.Media;
+
 namespace Jogo___Aula_de_terça
 {
     public partial class Form1 : Form
@@ -71,7 +73,6 @@ namespace Jogo___Aula_de_terça
                     firstClicked = null;
                     secondClicked = null;
                     return;
-                   
                 }
 
                 timer1.Start();
@@ -90,7 +91,6 @@ namespace Jogo___Aula_de_terça
                         return;
                 }
             }
-
             MessageBox.Show("Você combinou todos os pares, PARABÉNS");
             Close();
         }
