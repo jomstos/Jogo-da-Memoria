@@ -1,25 +1,30 @@
-using System.Media;
-
 namespace Jogo___Aula_de_terça
 {
+    
     public partial class Form1 : Form
     {
+        
+        int cliques = 0;
         Random random = new Random();
 
 
         List<string> icons = new List<string>()
         {
-            "!", "!", "N", "N", ",", ",", "K", "K",
-            "b", "b", "v", "v", "w", "w", "J", "J",
+            "🐶", "🐶", "🐱", "🐱", "🦁", "🦁", "🐵", "🐵",
+            "🐘", "🐘", "🦓", "🦓", "🦒", "🦒", "🦍", "🦍"
         };
+
+
 
         Label firstClicked = null;
         Label secondClicked = null;
+        public string NomeDoJogador { get; set; }
 
-        public Form1()
+        public Form1(string nome)
         {
             InitializeComponent();
-
+            timer1.Tick += timer1_Tick;
+            NomeDoJogador = nome;
             AssignIconsToSquare();
 
         }
@@ -31,21 +36,24 @@ namespace Jogo___Aula_de_terça
                 Label iconLabel = control as Label;
                 if (iconLabel != null)
                 {
+                    iconLabel.Click += label1_Click;
                     int randomNumber = random.Next(icons.Count);
                     iconLabel.Text = icons[randomNumber];
                     iconLabel.ForeColor = iconLabel.BackColor; // essa linha faz com que as imagens ficam escondidas
                     icons.RemoveAt(randomNumber); // essa linha exclui o numero que ja foi selecionado, para que nao se repita mais de 2x
+                    iconLabel.Font = new Font("Segoe UI Emoji", 32, FontStyle.Regular);
+                    iconLabel.TextAlign = ContentAlignment.MiddleCenter;
                 }
             }
         }
 
-        private void label_Click(object sender, EventArgs e)
+        private void label1_Click(object sender, EventArgs e)
         {
             if (timer1.Enabled == true)
             {
                 return;
             }
-
+            
             Label clickedLabel = sender as Label;
 
             if (clickedLabel != null)
@@ -54,6 +62,9 @@ namespace Jogo___Aula_de_terça
                 {
                     return;
                 }
+
+                cliques++;
+                lblCliques.Text = $"Cliques: {cliques}";
 
                 if (firstClicked == null)
                 {
@@ -66,12 +77,15 @@ namespace Jogo___Aula_de_terça
                 secondClicked = clickedLabel;
                 secondClicked.ForeColor = Color.Black;
 
-                CheckForWinner();
+                
 
                 if (firstClicked.Text == secondClicked.Text)
                 {
                     firstClicked = null;
                     secondClicked = null;
+
+                    CheckForWinner();
+
                     return;
                 }
 
@@ -91,7 +105,9 @@ namespace Jogo___Aula_de_terça
                         return;
                 }
             }
-            MessageBox.Show("Você combinou todos os pares, PARABÉNS");
+
+            MessageBox.Show($"{NomeDoJogador}, você combinou todos os pares! PARABÉNS! 🎉\nTotal de cliques: {cliques}");
+
             Close();
         }
         private void timer1_Tick(object sender, EventArgs e)
@@ -103,6 +119,11 @@ namespace Jogo___Aula_de_terça
 
             firstClicked = null;
             secondClicked = null;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
